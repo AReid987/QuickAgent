@@ -1,15 +1,16 @@
 import asyncio
-from dotenv import load_dotenv
 
 from deepgram import (
     DeepgramClient,
     DeepgramClientOptions,
-    LiveTranscriptionEvents,
     LiveOptions,
+    LiveTranscriptionEvents,
     Microphone,
 )
+from dotenv import load_dotenv
 
 load_dotenv()
+
 
 class TranscriptCollector:
     def __init__(self):
@@ -22,9 +23,11 @@ class TranscriptCollector:
         self.transcript_parts.append(part)
 
     def get_full_transcript(self):
-        return ' '.join(self.transcript_parts)
+        return " ".join(self.transcript_parts)
+
 
 transcript_collector = TranscriptCollector()
+
 
 async def get_transcript():
     try:
@@ -37,8 +40,8 @@ async def get_transcript():
             # print (result)
             sentence = result.channel.alternatives[0].transcript
 
-            print (result)
-            
+            print(result)
+
             if not result.speech_final:
                 transcript_collector.add_part(sentence)
             else:
@@ -62,7 +65,7 @@ async def get_transcript():
             encoding="linear16",
             channels=1,
             sample_rate=16000,
-            endpointing=True
+            endpointing=True,
         )
 
         await dg_connection.start(options)
@@ -89,6 +92,7 @@ async def get_transcript():
     except Exception as e:
         print(f"Could not open socket: {e}")
         return
+
 
 if __name__ == "__main__":
     asyncio.run(get_transcript())
